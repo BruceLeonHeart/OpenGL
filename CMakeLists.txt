@@ -11,8 +11,12 @@ endif()
 
 project ("OpenGL")
 
+
+# Generate compile_commands.json
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+
+# Dependencies
+include(Dependencies.cmake)
+
 add_subdirectory("App")
 
-
-
-# TODO: 如有需要，请添加测试并安装目标。
