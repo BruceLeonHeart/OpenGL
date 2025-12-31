@@ -20,5 +20,3 @@ if (NOT glfw3_FOUND)
         add_subdirectory(${glfw3_SOURCE_DIR} ${glfw3_BINARY_DIR})
     endif()
 endif()
-
-

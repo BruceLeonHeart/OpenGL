@@ -18,5 +18,9 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 # Dependencies
 include(Dependencies.cmake)
 
+set(GLEW_INCLUDE_DIRS "${CMAKE_CURRENT_SOURCE_DIR}/Dependencies/glew-2.3.0/include")
+set(GLEW_LIBS "${CMAKE_CURRENT_SOURCE_DIR}/Dependencies/glew-2.3.0/lib/Release/Win32")
+add_definitions(-DGLEW_STATIC)
+
 add_subdirectory("App")
 
