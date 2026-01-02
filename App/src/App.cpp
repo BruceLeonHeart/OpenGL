@@ -118,18 +118,32 @@ int main(void)
 		-0.5f, -0.5f, // left bottom
          0.5f, -0.5f,
 		 0.5f, 0.5f,
-
-         0.5f, 0.5f,
 		 -0.5f, 0.5f,
-        -0.5f, -0.5f // left bottom
     };
-    //申请buffer
-    unsigned int buffer;
-	glGenBuffers(1, &buffer);
+
+	// indices for square using two triangles
+    unsigned int indices[] = {
+        0, 1, 2,
+        2, 3, 0
+	};
+
+    
+    //申请 vertex buffer
+    unsigned int positionBuffer;
+	glGenBuffers(1, &positionBuffer);
     // 上下文绑定申请的buffer
-    glBindBuffer(GL_ARRAY_BUFFER, buffer);
+    glBindBuffer(GL_ARRAY_BUFFER, positionBuffer);
 	// 把数据copy到GPU
-    glBufferData(GL_ARRAY_BUFFER, 12 * sizeof(float), (void*)positions, GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, 8 * sizeof(float), (void*)positions, GL_STATIC_DRAW);
+
+    //申请 indices buffer
+    unsigned int indexBuffer;
+    glGenBuffers(1, &indexBuffer);
+    // 上下文绑定申请的buffer
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBuffer);
+    // 把数据copy到GPU
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, 6 * sizeof(unsigned int), (void*)indices, GL_STATIC_DRAW);
+
     // 使能顶点属性
 	glEnableVertexAttribArray(0);
     // 告诉GPU buffer数据格式
@@ -150,8 +164,8 @@ int main(void)
         /* Render here */
         glClear(GL_COLOR_BUFFER_BIT);
 
-        // draw Triangle
-        glDrawArrays(GL_TRIANGLES, 0, 6);
+		// draw Square using indices
+		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);
 
         /* Swap front and back buffers */
         glfwSwapBuffers(window);
