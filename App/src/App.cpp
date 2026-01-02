@@ -112,10 +112,16 @@ int main(void)
 
 	std::cout << "OpenGL Version: " << glGetString(GL_VERSION) << std::endl;
 	
-    float positions[6] = {
-        -0.5f, -0.5f,
-         0.0f,  0.5f,
-		 0.5f, -0.5f
+	// draw Square  
+    // anti-clockwise
+    float positions[] = {
+		-0.5f, -0.5f, // left bottom
+         0.5f, -0.5f,
+		 0.5f, 0.5f,
+
+         0.5f, 0.5f,
+		 -0.5f, 0.5f,
+        -0.5f, -0.5f // left bottom
     };
     //申请buffer
     unsigned int buffer;
@@ -123,32 +129,17 @@ int main(void)
     // 上下文绑定申请的buffer
     glBindBuffer(GL_ARRAY_BUFFER, buffer);
 	// 把数据copy到GPU
-    glBufferData(GL_ARRAY_BUFFER, 6 * sizeof(float), (void*)positions, GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, 12 * sizeof(float), (void*)positions, GL_STATIC_DRAW);
     // 使能顶点属性
 	glEnableVertexAttribArray(0);
     // 告诉GPU buffer数据格式
 	glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, sizeof(float) * 2, 0);
 
-    std::string vertexShader =
-        "#version 330 core\n"
-        "layout(location = 0) in vec4 position; \n"
-        "void main() \n"
-        "{ \n"
-        "   gl_Position = position; \n"
-        "} \n";
-
-    std::string fragmentShader =
-        "#version 330 core\n"
-        "layout(location = 0) out vec4 color; \n"
-        "void main() \n"
-        "{ \n"
-        "   color = vec4(1.0, 0.0, 0.0, 1.0); \n"
-        "} \n";
 	ShaderProgramSource source = ParseShader("res/shaders/Basic.shader");
-	std::cout << "VERTEX" << std::endl;
-	std::cout << source.VertexSource << std::endl;
-	std::cout << "FRAGMENT" << std::endl;
-	std::cout << source.FragmentSource << std::endl;
+	//std::cout << "VERTEX" << std::endl;
+	//std::cout << source.VertexSource << std::endl;
+	//std::cout << "FRAGMENT" << std::endl;
+	//std::cout << source.FragmentSource << std::endl;
 	unsigned int program = CreateProgram(source.VertexSource, source.FragmentSource);
 
 	glUseProgram(program);
@@ -160,7 +151,7 @@ int main(void)
         glClear(GL_COLOR_BUFFER_BIT);
 
         // draw Triangle
-        glDrawArrays(GL_TRIANGLES, 0, 3);
+        glDrawArrays(GL_TRIANGLES, 0, 6);
 
         /* Swap front and back buffers */
         glfwSwapBuffers(window);
