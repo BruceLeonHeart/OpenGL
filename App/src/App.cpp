@@ -1,6 +1,49 @@
 ﻿#include <GL/glew.h>
 #include <GLFW/glfw3.h>
 #include <iostream>
+#include <fstream>
+#include <string>
+#include <sstream>
+
+struct ShaderProgramSource
+{
+    std::string VertexSource;
+    std::string FragmentSource;
+};  
+
+static ShaderProgramSource ParseShader(const std::string& filepath)
+{
+    enum class ShaderType
+    {
+        NONE = -1, VERTEX = 0, FRAGMENT = 1
+	};
+	std::fstream stream(filepath);
+	std::string line;
+	std::stringstream ss[2];
+	ShaderType type = ShaderType::NONE;
+    while (getline(stream, line))
+    {
+        if(line.find("#shader") != std::string::npos)
+        {
+            if(line.find("vertex") != std::string::npos)
+            {
+                // vertex shader
+				type = ShaderType::VERTEX;
+
+            }
+            else if(line.find("fragment") != std::string::npos)
+            {
+                // fragment shader
+				type = ShaderType::FRAGMENT;
+            }
+		}
+        else
+        {
+			ss[(int)type] << line << '\n';
+        }
+	}
+	return { ss[0].str(), ss[1].str() };
+}
 
 static unsigned int CompileShader(unsigned int type, const std::string& source)
 {
@@ -101,8 +144,13 @@ int main(void)
         "{ \n"
         "   color = vec4(1.0, 0.0, 0.0, 1.0); \n"
         "} \n";
+	ShaderProgramSource source = ParseShader("res/shaders/Basic.shader");
+	std::cout << "VERTEX" << std::endl;
+	std::cout << source.VertexSource << std::endl;
+	std::cout << "FRAGMENT" << std::endl;
+	std::cout << source.FragmentSource << std::endl;
+	unsigned int program = CreateProgram(source.VertexSource, source.FragmentSource);
 
-	unsigned int program = CreateProgram(vertexShader, fragmentShader);
 	glUseProgram(program);
 
     /* Loop until the user closes the window */
