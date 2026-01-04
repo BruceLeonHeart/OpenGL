@@ -10,6 +10,7 @@ target_link_directories(App PRIVATE ${GLEW_LIBS})
 target_link_libraries(App PRIVATE OpenGL::GL glfw glew32s)
 
 # 设置资源文件路径
+# TODO 修改Shader后 cmake 需要重新生成才能复制最新的资源文件
 file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/res DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
 
 if (CMAKE_VERSION VERSION_GREATER 3.12)
